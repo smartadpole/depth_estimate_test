@@ -15,7 +15,7 @@ output
 ```angular2html
 --data_dir image_dir --img_height 400 --img_width 640 --output_dir result_parker --onnx_file *.onnx --bf 3424 --tof_dir result_tof --tof_selected result_image_with_tof
 ```
-```--data_dir``` 、```--tof_dir ``` 、 ```--tof_selected``` in cam0 should contain same images 
+```--data_dir``` 、```--tof_dir ``` 、 ```--tof_selected``` in cam0 should contain same images, if all selected point's tof value * depth == zero, continue next image.  
 output  
     dir ```result/color、result/depth、result/gray``` is disp result for show
     dir ```depth_psl``` is used for tof calculation

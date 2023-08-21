@@ -104,4 +104,5 @@ def compare_depth_tof(path, file_name, depth, tof, image=None):
     plt.imshow(image_dis_show)
     plt.colorbar()
     plt.savefig(errpr_img_scale)
+    plt.clf()
     print("\n")
