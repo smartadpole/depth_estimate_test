@@ -13,6 +13,7 @@ from utils.preprocess_postprocess import preprocess_hit, preprocess_madnet
 from utils.file_utils import WriteDepth
 from utils.file_utils import get_files, get_last_name
 from utils.compare_tof import compare_depth_tof
+from utils.compare_predict_gt_disp import compare_depth_disp
 
 def get_parameter():
     parser = argparse.ArgumentParser()
@@ -119,6 +120,10 @@ def main():
 
     if args.disp_dir is not None:
         disp_true = get_files(args.disp_dir)
+        for disp_file, depth_file in zip(disp_true, depth_file):
+            assert get_last_name(disp_file) == get_last_name(
+                depth_file), "gt disp file: {} and depth file: {} is not same!".format(tof_file, depth_file)
+            compare_depth_disp(args.output_dir, op, depth_file,disp_file)
 
 
 # Press the green button in the gutter to run the script.

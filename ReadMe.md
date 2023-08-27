@@ -1,6 +1,8 @@
 
 ## Environment
-pip install -r requirements.txt
+1. pip install -r requirements.txt
+2. confirm file ```/usr/share/fonts/Fonts/simsun.ttf``` is exists.
+
 ## test example demo
 ### 1. only output depth(disp) images
 ```angular2html

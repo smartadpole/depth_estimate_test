@@ -61,7 +61,11 @@ def compare_depth_tof(path, file_name, depth, tof, image=None):
         image_depth_tof = image_depth * image_tof_with_value - image_tof
         image_dis_show = image_depth_tof.copy()
         image_depth_tof = np.abs(image_depth_tof)
+        image_box = image_tof_with_value.copy()
     else:
+        if np.sum((image_with_tof_box[:, :, 0] == 0) * (image_with_tof_box[:, :, 1] == 0)
+                  * (image_with_tof_box[:, :, 2] == 255)) < 1:
+            return
         image_box = (image_with_tof_box[:, :, 0] == 0) * (image_with_tof_box[:, :, 1] == 0) * (image_with_tof_box[:, :, 2] == 255) * image_tof_with_value
         image_depth_tof = image_depth * image_box - image_tof * image_box
         image_dis_show = image_depth_tof.copy()
