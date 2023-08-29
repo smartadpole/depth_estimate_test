@@ -23,7 +23,7 @@ def compare_depth_tof(path, file_name, depth, tof, image=None):
 
     image_depth = cv2.imread(depth)
     image_tof = cv2.imread(tof)
-
+    print("aaaaaaaaA: {}, tof: {}".format(np.max(image_depth), np.max(image_tof)))
     erroe_number = file_name.replace(".png", "_error_number.png")
     error_ratio = file_name.replace(".png", "_error_ratio.png")
     errpr_img = file_name.replace(".png", "_error.png")
@@ -40,7 +40,7 @@ def compare_depth_tof(path, file_name, depth, tof, image=None):
     MkdirSimple(errpr_img_scale)
 
     # 深度估计图像获取非0的index
-    image_depth = image_depth[:, :, 0] + (image_depth[:, :, 1] > 0) * 255 + image_depth[:, :, 1] + (image_depth[:, :, 2] > 0) * 511 + image_depth[:, :, 2]
+    image_depth = image_depth[:, :, 0] #+ (image_depth[:, :, 1] > 0) * 255 + image_depth[:, :, 1] + (image_depth[:, :, 2] > 0) * 511 + image_depth[:, :, 2]
     image_depth_with_value = image_depth.copy()
     image_depth_with_value[image_depth_with_value > 0] = 1
 
@@ -51,16 +51,17 @@ def compare_depth_tof(path, file_name, depth, tof, image=None):
     image_tof_with_value = image_tof.copy()
 
     image_tof_with_value[image_tof > 0] = 1
-    
-    if np.sum((image_with_tof_box[:, :, 0] == 0) * (image_with_tof_box[:, :, 1] == 0)
-              * (image_with_tof_box[:, :, 2] == 255)) < 1:
-        return
+    if image is not None:
+        if np.sum((image_with_tof_box[:, :, 0] == 0) * (image_with_tof_box[:, :, 1] == 0)
+                  * (image_with_tof_box[:, :, 2] == 255)) < 1:
+            return
     if np.sum(image_tof_with_value) < 1:
         return
     if image is None:
         image_depth_tof = image_depth * image_tof_with_value - image_tof
         image_dis_show = image_depth_tof.copy()
         image_depth_tof = np.abs(image_depth_tof)
+        image_box = image_tof_with_value.copy()
     else:
         image_box = (image_with_tof_box[:, :, 0] == 0) * (image_with_tof_box[:, :, 1] == 0) * (image_with_tof_box[:, :, 2] == 255) * image_tof_with_value
         image_depth_tof = image_depth * image_box - image_tof * image_box

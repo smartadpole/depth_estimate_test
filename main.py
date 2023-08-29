@@ -17,7 +17,7 @@ from utils.compare_tof import compare_depth_tof
 def get_parameter():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--data_dir', default=None, required=True, type=str, help='Data directory for prediction')
+    parser.add_argument('--data_dir', default=None, required=False, type=str, help='Data directory for prediction')
 
     parser.add_argument('--model_type', default="madnet", type=str, help='model type of onnx')
 
@@ -49,7 +49,7 @@ def main():
 
     print("current dataset's bf is {}".format(args.bf))
 
-    if os.path.isdir(args.data_dir):
+    if args.data_dir is not None and os.path.isdir(args.data_dir):
         left_files, right_files = get_left_right_files(args.data_dir)
 
         # load onnx file
