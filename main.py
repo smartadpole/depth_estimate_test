@@ -41,6 +41,9 @@ def get_parameter():
     parser.add_argument('--bf', type=str, default=3424, help='bf for test to generate depth, only parker'
                                                              ' need this parameter now')
 
+    parser.add_argument('--center_crop', type=str, default=None, help='bf for test to generate depth, only parker'
+                                                             ' need this parameter now')
+
     return parser.parse_args()
 def main():
     args = get_parameter()
@@ -114,7 +117,7 @@ def main():
             else:
                 op = os.path.join(args.output_dir, depth_file[root_len:])
 
-            compare_depth_tof(args.output_dir, op, depth_file, tof_file, tof_selected_file)
+            compare_depth_tof(args.output_dir, op, depth_file, tof_file, tof_selected_file, args.center_crop)
 
 
     if args.disp_dir is not None:
