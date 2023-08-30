@@ -12,7 +12,7 @@ sys.path.append(os.path.join(CURRENT_DIR, './'))
 from file_utils import MkdirSimple
 from file_utils import GetDepthImg
 
-def compare_depth_tof(path, file_name, depth, tof, image=None):
+def compare_depth_tof(path, file_name, depth, tof, image=None, center_crop=None):
 
     if image is None:
         pass
@@ -23,6 +23,18 @@ def compare_depth_tof(path, file_name, depth, tof, image=None):
 
     image_depth = cv2.imread(depth)
     image_tof = cv2.imread(tof)
+    if center_crop is not None:
+        height_crop = image_depth.shape[0] * center_crop
+        width_crop = image_depth.shape[1] * center_crop
+        left = width_crop // 2
+        right = image_depth.shape[0] - width_crop // 2
+        top = height_crop//2
+        bottom = image_depth.shape[1] - height_crop // 2
+        image_depth = image_depth[top: bottom, left: right]
+        image_tof = image_tof[top: bottom, left: right]
+        if image is not None:
+            image_with_tof_box = image_with_tof_box[top: bottom, left: right]
+
 
     erroe_number = file_name.replace(".png", "_error_number.png")
     error_ratio = file_name.replace(".png", "_error_ratio.png")
@@ -40,7 +52,7 @@ def compare_depth_tof(path, file_name, depth, tof, image=None):
     MkdirSimple(errpr_img_scale)
 
     # 深度估计图像获取非0的index
-    image_depth = image_depth[:, :, 0] + (image_depth[:, :, 1] > 0) * 255 + image_depth[:, :, 1] + (image_depth[:, :, 2] > 0) * 511 + image_depth[:, :, 2]
+    image_depth = image_depth[:, :, 0] #+ (image_depth[:, :, 1] > 0) * 255 + image_depth[:, :, 1] + (image_depth[:, :, 2] > 0) * 511 + image_depth[:, :, 2]
     image_depth_with_value = image_depth.copy()
     image_depth_with_value[image_depth_with_value > 0] = 1
 
@@ -51,10 +63,10 @@ def compare_depth_tof(path, file_name, depth, tof, image=None):
     image_tof_with_value = image_tof.copy()
 
     image_tof_with_value[image_tof > 0] = 1
-    
-    if np.sum((image_with_tof_box[:, :, 0] == 0) * (image_with_tof_box[:, :, 1] == 0)
-              * (image_with_tof_box[:, :, 2] == 255)) < 1:
-        return
+    if image is not None:
+        if np.sum((image_with_tof_box[:, :, 0] == 0) * (image_with_tof_box[:, :, 1] == 0)
+                  * (image_with_tof_box[:, :, 2] == 255)) < 1:
+            return
     if np.sum(image_tof_with_value) < 1:
         return
     if image is None:
