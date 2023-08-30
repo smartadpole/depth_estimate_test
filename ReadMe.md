@@ -2,8 +2,25 @@
 ## Environment
 1. pip install -r requirements.txt
 2. confirm file ```/usr/share/fonts/Fonts/simsun.ttf``` is exists.
-
-## test example demo
+## new test example
+### KITTI
+ - no disp
+```angular2html
+python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti/temp/ --img_height 375 --img_width 1424 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_ --output_dir ./result/D10.2.13/kitti_2000_no
+```
+ - with disp
+```angular2html
+python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/REMAP --img_height 375 --img_width 1424 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.14_375_1242/epoch-1700.onnx --disp_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/disp --output_dir ./result/D10.2.14/kitti_1700
+```
+### Parker
+```angular2html
+python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_tof --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --output_dir ttt1 --bf 3424 --center_crop 0.9
+```
+### Rubby
+```angular2html
+ python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/rubby --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.14_576_360/epoch-1700.onnx   --bf 1420 --center_crop 0.9 --output_dir ./result/D10.2.14/rubby-1700
+```
+## old version test example demo
 ### 1. only output depth(disp) images
 ```angular2html
 python main.py --data_dir test_images --img_height 400 --img_width 640 --output_dir result --onnx_file *.onnx --bf 3424

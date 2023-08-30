@@ -5,6 +5,7 @@ import numpy as np
 import os
 from file_utils import MkdirSimple
 import matplotlib.pyplot as plt
+from utils.compare_tof import get_boundary
 
 def val_cv2_tf_io(disp_file):
 
@@ -92,12 +93,21 @@ def getAbsdiff(depth_map, disparity_map, path, name):
     plt.savefig("myplot.png")
 
 
-def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None):
+def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None, center_crop=None):
     gt = cv2.imread(disp_file, -1)
     gt = gt /256.0
     if bf is not None:
         gt = cv2.imread(disp_file, -1)
-        gt[gt > 0] = bf / gt[gt > 0]
+        gt = gt[:, :, 0] + (gt[:, :, 1] > 0) * 255 + gt[:, :, 1] + (
+                    gt[:, :, 2] > 0) * 511 + gt[:, :, 2]
+        if center_crop is not None:
+            left, right, top, bottom = get_boundary(gt, center_crop)
+            gt = gt[top: bottom, left: right]
+        bf = float(bf)
+        mask = gt > 0
+        gt[mask] = bf / gt[mask]
+        print(gt.shape)
+
     disparities = disp_output
 
     epe = EndPointError()
@@ -110,7 +120,7 @@ def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None):
     bad3.update_state(gt_flaot, disparities_float)
     print("Bad3: ", bad3.result())
 
-    getAbsdiff(gt_flaot, disparities_float, output_dir, op)
+    getAbsdiff(disparities_float, gt_flaot, output_dir, op)
 
 if __name__ == '__main__':
     # compare_depth_disp("test_c","/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/result_D10.0.7_2000_test/gray/000000_10.png","/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/result_D10.0.7_2000_test/gray/000000_10.png","/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti/disp/000000_10.png")

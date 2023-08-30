@@ -13,12 +13,14 @@ from file_utils import MkdirSimple
 from file_utils import GetDepthImg
 
 def get_boundary(image, center_crop):
-    height_crop = image.shape[0] * float(center_crop)
-    width_crop = image.shape[1] * float(center_crop)
-    left = int(width_crop // 2)
-    right = int(image.shape[1] - width_crop // 2)
-    top = int(height_crop // 2)
-    bottom = int(image.shape[0] - height_crop // 2)
+    center_crop = 1 - float(center_crop)
+    height_crop = round(image.shape[0] * float(center_crop))
+    width_crop = round(image.shape[1] * float(center_crop))
+    print(height_crop, width_crop)
+    left = round(width_crop // 2)
+    right = round(image.shape[1] - width_crop // 2)
+    top = round(height_crop // 2)
+    bottom = round(image.shape[0] - height_crop // 2)
 
     return left, right, top , bottom
 def compare_depth_tof(path, file_name, depth, tof, image=None, center_crop=None):
