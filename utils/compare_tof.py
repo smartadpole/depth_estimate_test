@@ -12,6 +12,15 @@ sys.path.append(os.path.join(CURRENT_DIR, './'))
 from file_utils import MkdirSimple
 from file_utils import GetDepthImg
 
+def get_boundary(image, center_crop):
+    height_crop = image.shape[0] * float(center_crop)
+    width_crop = image.shape[1] * float(center_crop)
+    left = int(width_crop // 2)
+    right = int(image.shape[1] - width_crop // 2)
+    top = int(height_crop // 2)
+    bottom = int(image.shape[0] - height_crop // 2)
+
+    return left, right, top , bottom
 def compare_depth_tof(path, file_name, depth, tof, image=None, center_crop=None):
 
     if image is None:
@@ -24,12 +33,8 @@ def compare_depth_tof(path, file_name, depth, tof, image=None, center_crop=None)
     image_depth = cv2.imread(depth)
     image_tof = cv2.imread(tof)
     if center_crop is not None:
-        height_crop = image_depth.shape[0] * center_crop
-        width_crop = image_depth.shape[1] * center_crop
-        left = width_crop // 2
-        right = image_depth.shape[0] - width_crop // 2
-        top = height_crop//2
-        bottom = image_depth.shape[1] - height_crop // 2
+        left, right, top, bottom = get_boundary(image_depth, center_crop)
+
         image_depth = image_depth[top: bottom, left: right]
         image_tof = image_tof[top: bottom, left: right]
         if image is not None:

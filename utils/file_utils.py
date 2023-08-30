@@ -95,6 +95,8 @@ def GetDepthImgPSL(img):
     return depth_img_rgb.astype(np.uint8)
 
 def WriteDepth(depth, limg, path, name, bf=None):
+    if bf is not None:
+        bf = float(bf)
     output_concat_color = os.path.join(path, "concat_color", name)
     output_concat_gray = os.path.join(path, "concat_gray", name)
     output_gray = os.path.join(path, "gray", name)

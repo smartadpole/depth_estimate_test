@@ -32,10 +32,8 @@ def getAbsdiff(depth_map, disparity_map, path, name):
     MkdirSimple(output_depth)
 
     depth_map = np.squeeze(depth_map)
-    print("depth map : ", depth_map)
 
     disparity_map =np.squeeze(disparity_map)# * 256.0
-    print("disparity map: ", disparity_map)
 
     mask = disparity_map > 0
 
@@ -94,20 +92,17 @@ def getAbsdiff(depth_map, disparity_map, path, name):
     plt.savefig("myplot.png")
 
 
-def compare_depth_disp(output_dir, op, depth_file, disp_file, bf=None):
-    print(depth_file, disp_file)
-    gt = cv2.imread(disp_file, -1) /256.0
+def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None):
+    gt = cv2.imread(disp_file, -1)
+    gt = gt /256.0
     if bf is not None:
         gt = cv2.imread(disp_file, -1)
         gt[gt > 0] = bf / gt[gt > 0]
-    disparities = cv2.imread(depth_file, -1)
-    if bf is not None:
-        disparities[disparities > 0] = bf / disparities[disparities > 0]
+    disparities = disp_output
 
     epe = EndPointError()
     gt_flaot = gt.astype(np.float32)
-    disparities_float = disparities.astype(np.float32)
-    print(gt_flaot.shape, disparities_float.shape)
+    disparities_float = np.squeeze(disparities).astype(np.float32)
     epe.update_state(gt_flaot, disparities_float)
     print("EPE: ", epe.result())
 
@@ -115,8 +110,9 @@ def compare_depth_disp(output_dir, op, depth_file, disp_file, bf=None):
     bad3.update_state(gt_flaot, disparities_float)
     print("Bad3: ", bad3.result())
 
-    # getAbsdiff(gt_flaot, disparities_float, output_dir, op)
+    getAbsdiff(gt_flaot, disparities_float, output_dir, op)
 
 if __name__ == '__main__':
     # compare_depth_disp("test_c","/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/result_D10.0.7_2000_test/gray/000000_10.png","/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/result_D10.0.7_2000_test/gray/000000_10.png","/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti/disp/000000_10.png")
-    compare_depth_disp("test_c", "/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/result_D10.0.7_2000_test/gray/000000_10.png","/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/result_D10.0.7_2000_test/gray/000000_10.png", "/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti/disp/000000_10.png")
+    disp_output = cv2.imread("/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/result_D10.0.7_2000_test/gray/000000_10.png", -1)
+    compare_depth_disp("test_c",1, disp_output, "/home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti/disp/000000_10.png")

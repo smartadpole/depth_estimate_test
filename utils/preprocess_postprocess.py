@@ -22,6 +22,6 @@ def preprocess_hit(image):
     return image
 
 def preprocess_madnet(image):
-    image = np2float(image)
+    image = np2float(image, bgr=True)
     image = image[None, ...]
     return image

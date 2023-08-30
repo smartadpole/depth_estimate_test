@@ -14,7 +14,7 @@ from utils.file_utils import WriteDepth
 from utils.file_utils import get_files, get_last_name
 from utils.compare_tof import compare_depth_tof
 from utils.compare_predict_gt_disp import compare_depth_disp
-
+from utils.compare_tof import get_boundary
 def get_parameter():
     parser = argparse.ArgumentParser()
 
@@ -39,7 +39,7 @@ def get_parameter():
 
     parser.add_argument("--tof_selected", default=None, type=str, help="Dir to save images of tof points selected")
 
-    parser.add_argument('--bf', type=str, default=3424, help='bf for test to generate depth, only parker'
+    parser.add_argument('--bf', type=str, default=None, help='bf for test to generate depth, only parker'
                                                              ' need this parameter now')
 
     parser.add_argument('--center_crop', type=str, default=None, help='bf for test to generate depth, only parker'
@@ -55,6 +55,9 @@ def main():
 
     if args.data_dir is not None and os.path.isdir(args.data_dir):
         left_files, right_files = get_left_right_files(args.data_dir)
+        disp_true = [None] * len(left_files)
+        if args.disp_dir is not None:
+            disp_true = get_files(args.disp_dir)
 
         # load onnx file
         model = ONNXModel(args.onnx_file)
@@ -62,13 +65,18 @@ def main():
 
         root_len = len(args.data_dir)
 
-        for left_file, right_file in zip(left_files, right_files):
+        for left_file, right_file, disp_file in zip(left_files, right_files, disp_true):
             if left_file[root_len:][0] == '/':
                 op = os.path.join(args.output_dir, left_file[root_len + 1:])
             else:
                 op = os.path.join(args.output_dir, left_file[root_len:])
             left_image = cv2.imread(left_file)
             right_image = cv2.imread(right_file)
+            if args.center_crop is not None:
+                left, right, top, bottom = get_boundary(left_image, args.center_crop)
+
+                left_image = left_image[top: bottom, left: right]
+                right_image = right_image[top: bottom, left: right]
 
             left_copy = left_image.copy()
             if args.model_type == "madnet":
@@ -81,10 +89,12 @@ def main():
             output = model.forward2((left_image, right_image))
 
             disp = output[0]
-
+            if disp_file is not None:
+                print("disp_file", disp_file)
+                compare_depth_disp(args.output_dir, op, disp, disp_file, args.bf)
             op = op.replace(".jpg", ".png")
 
-            WriteDepth(disp, left_copy, args.output_dir, op, float(args.bf))
+            WriteDepth(disp, left_copy, args.output_dir, op, args.bf)
 
             depth_from_onnx = True
 
@@ -109,9 +119,6 @@ def main():
         root_len = len(args.output_dir)
         for tof_file, tof_selected_file, depth_file in zip(tof_lists, tof_selected_lists, depth_files):
             assert get_last_name(tof_file) == get_last_name(depth_file), "tof file: {} and depth file: {} is not same!".format(tof_file, depth_file)
-            print(args.output_dir)
-            print(depth_file)
-            print(root_len)
 
             if depth_file[root_len:][0] == '/':
                 op = os.path.join(args.output_dir, depth_file[root_len + 1:])
@@ -121,12 +128,12 @@ def main():
             compare_depth_tof(args.output_dir, op, depth_file, tof_file, tof_selected_file, args.center_crop)
 
 
-    if args.disp_dir is not None:
-        disp_true = get_files(args.disp_dir)
-        for disp_file, depth_file in zip(disp_true, depth_files):
-            assert get_last_name(disp_file) == get_last_name(
-                depth_file), "gt disp file: {} and depth file: {} is not same!".format(tof_file, depth_file)
-            compare_depth_disp(args.output_dir, op, depth_file,disp_file, args.bf)
+    # if args.disp_dir is not None:
+    #     disp_true = get_files(args.disp_dir)
+    #     for disp_file, depth_file in zip(disp_true, depth_files):
+    #         assert get_last_name(disp_file) == get_last_name(
+    #             depth_file), "gt disp file: {} and depth file: {} is not same!".format(tof_file, depth_file)
+    #         compare_depth_disp(args.output_dir, op, depth_file.replace("depth_psl", "gray"), disp_file, args.bf)
 
 
 # Press the green button in the gutter to run the script.
