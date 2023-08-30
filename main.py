@@ -120,10 +120,10 @@ def main():
 
     if args.disp_dir is not None:
         disp_true = get_files(args.disp_dir)
-        for disp_file, depth_file in zip(disp_true, depth_file):
+        for disp_file, depth_file in zip(disp_true, depth_files):
             assert get_last_name(disp_file) == get_last_name(
                 depth_file), "gt disp file: {} and depth file: {} is not same!".format(tof_file, depth_file)
-            compare_depth_disp(args.output_dir, op, depth_file,disp_file)
+            compare_depth_disp(args.output_dir, op, depth_file,disp_file, args.bf)
 
 
 # Press the green button in the gutter to run the script.

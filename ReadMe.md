@@ -22,4 +22,8 @@ output
     dir ```result/color、result/depth、result/gray``` is disp result for show
     dir ```depth_psl``` is used for tof calculation
     dir ```tof_error``` contain result
-  
+### 3. output kitti disp diff
+```angular2html
+python main.py --datra_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test
+_images/kitti_train/REMAP --img_height 375  --img_width 1242 --disp_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/disp --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/kitti.onnx/kitti.onnx
+```

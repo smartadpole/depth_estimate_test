@@ -145,7 +145,8 @@ def WriteDepth(depth, limg, path, name, bf=None):
 
     predict_np_gray_scale = predict_np * 3
     cv2.imwrite(output_gray_scale, predict_np_gray_scale)
-    cv2.imwrite(output_gray, predict_np)
+    cv2.imwrite(output_gray, np.squeeze(predict_np))
+    print(predict_np.shape, np.squeeze(predict_np).shape)
     cv2.imwrite(output_depth, depth_img_rgb)
 
     cv2.imwrite(output_concat_depth, concat_img_depth)
