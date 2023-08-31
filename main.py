@@ -45,6 +45,10 @@ def get_parameter():
     parser.add_argument('--center_crop', type=str, default=None, help='bf for test to generate depth, only parker'
                                                              ' need this parameter now')
 
+    parser.add_argument('--without_tof', action="store_true", default=False, help="indemind data label is not tof")
+
+    parser.add_argument('--scale', type=str, default=100, help="depth image real cm * scale for test depth image")
+
     return parser.parse_args()
 def main():
     args = get_parameter()
@@ -90,7 +94,9 @@ def main():
             disp = output[0]
             if disp_file is not None:
                 print("disp_file", disp_file)
-                compare_depth_disp(args.output_dir, op, disp, disp_file, args.bf, args.center_crop)
+                compare_depth_disp(args.output_dir, op, disp, disp_file, bf=args.bf
+                                   , center_crop=args.center_crop, without_tof=args.without_tof
+                                   ,scale=args.scale)
             op = op.replace(".jpg", ".png")
 
             WriteDepth(disp, left_copy, args.output_dir, op, args.bf)

@@ -14,11 +14,19 @@ python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/S
 ```
 ### Parker
 ```angular2html
-python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_tof --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --output_dir ttt1 --bf 3424 --center_crop 0.9
+python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_tof --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx  --bf 3424 --center_crop 0.9  --output_dir ttt1
+```
+ - use depth as labels
+```angular2html
+python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_depth --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --center_crop 0.9 --without_tof --output_dir ttt1 
 ```
 ### Rubby
 ```angular2html
  python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/rubby --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.14_576_360/epoch-1700.onnx   --bf 1420 --center_crop 0.9 --output_dir ./result/D10.2.14/rubby-1700
+```
+ - use depth as labels
+```angular2html
+python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/rubby  --disp_dir /data/rubby --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --center_crop 0.9 --without_tof --output_dir ttt1 
 ```
 ## old version test example demo
 ### 1. only output depth(disp) images

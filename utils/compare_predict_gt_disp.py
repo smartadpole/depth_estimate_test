@@ -93,19 +93,29 @@ def getAbsdiff(depth_map, disparity_map, path, name):
     plt.savefig("myplot.png")
 
 
-def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None, center_crop=None):
+def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None, center_crop=None, without_tof=False, scale=100.0):
     gt = cv2.imread(disp_file, -1)
     gt = gt /256.0
     if bf is not None:
         gt = cv2.imread(disp_file, -1)
-        gt = gt[:, :, 0] + (gt[:, :, 1] > 0) * 255 + gt[:, :, 1] + (
-                    gt[:, :, 2] > 0) * 511 + gt[:, :, 2]
+        if not without_tof:
+            gt = gt[:, :, 0] + (gt[:, :, 1] > 0) * 255 + gt[:, :, 1] + (
+                        gt[:, :, 2] > 0) * 511 + gt[:, :, 2]
+        else:
+            gt = gt / scale
+            if (gt.shape[-1] ==3):
+                gt = gt[:,:,-1]
+            elif gt.shape[-1] ==1:
+                pass
+            else:
+                print("read depth(disp) image error, channels is wrong: {}".format(disp_file))
         if center_crop is not None:
             left, right, top, bottom = get_boundary(gt, center_crop)
             gt = gt[top: bottom, left: right]
         bf = float(bf)
         mask = gt > 0
         gt[mask] = bf / gt[mask]
+        print("gt max: ", np.max(gt), np.min(gt))
         print(gt.shape)
 
     disparities = disp_output
