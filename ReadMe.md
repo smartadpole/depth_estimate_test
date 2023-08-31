@@ -28,6 +28,11 @@ python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /d
 ```angular2html
 python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/rubby  --disp_dir /data/rubby --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --center_crop 0.9 --without_tof --output_dir ttt1 
 ```
+### image different
+```angular2html
+main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP --output_dir result/D10.2.13/parker_compare_psl_new --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --tof_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_tof --tof_selected /data/Parker/test_result/NPU/depth_data/pick_mask/result_image_tof --center_crop 0.9
+```
+
 ## old version test example demo
 ### 1. only output depth(disp) images
 ```angular2html
