@@ -74,7 +74,6 @@ def main():
             right_image = cv2.imread(right_file)
             if args.center_crop is not None:
                 left, right, top, bottom = get_boundary(left_image, args.center_crop)
-
                 left_image = left_image[top: bottom, left: right]
                 right_image = right_image[top: bottom, left: right]
 
@@ -91,7 +90,7 @@ def main():
             disp = output[0]
             if disp_file is not None:
                 print("disp_file", disp_file)
-                compare_depth_disp(args.output_dir, op, disp, disp_file, args.bf)
+                compare_depth_disp(args.output_dir, op, disp, disp_file, args.bf, args.center_crop)
             op = op.replace(".jpg", ".png")
 
             WriteDepth(disp, left_copy, args.output_dir, op, args.bf)
