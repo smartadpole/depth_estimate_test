@@ -134,7 +134,7 @@ def main():
             else:
                 op = os.path.join(args.output_dir, depth_file[root_len:])
 
-            compare_depth_tof(args.output_dir, op, depth_file, tof_file, tof_selected_file, args.center_crop)
+            compare_depth_tof(args.output_dir, op, depth_file, tof_file, tof_selected_file, args.center_crop, width=args.width, height=args.height)
 
 
     # if args.disp_dir is not None:

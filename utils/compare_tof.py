@@ -51,7 +51,6 @@ def compare_depth_tof(path, file_name, depth, tof, image=None, center_crop=None,
 
     image_depth = cv2.imread(depth)
     image_tof = cv2.imread(tof)
-    print("1111", image_depth.shape, image_tof.shape, image_with_tof_box.shape)
 
     if center_crop is not None:
         left, right, top, bottom = get_boundary(image_tof, center_crop)
@@ -66,7 +65,6 @@ def compare_depth_tof(path, file_name, depth, tof, image=None, center_crop=None,
         if image is not None:
             image_with_tof_box = image_with_tof_box[top: bottom, left: right]
 
-    print(image_depth.shape, image_tof.shape, image_with_tof_box.shape)
     erroe_number = file_name.replace(".png", "_error_number.png")
     error_ratio = file_name.replace(".png", "_error_ratio.png")
     errpr_img = file_name.replace(".png", "_error.png")

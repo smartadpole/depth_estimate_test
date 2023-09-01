@@ -4,23 +4,22 @@
 2. confirm file ```/usr/share/fonts/Fonts/simsun.ttf``` is exists.
 ## new test example
 ### KITTI
- - no disp
+ - no disp(输入左右目、尺寸、onnx模型，输出测试结果)
 ```angular2html
 python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti/temp/ --height 375 --width 1242 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_ --output_dir ./result/D10.2.13/kitti_2000_no
 ```
- - with disp
+ - with disp(输入左右目、尺寸、--disp_dir KITTI类型的标签disp、onnx模型，输出测试结果+errormap)
 ```angular2html
 python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/REMAP --height 375 --width 1242 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.6.0_epoch_900_1242_375/epoch-0900.onnx --disp_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/disp --output_dir ./result/D10.6.0/kitti_1242
-python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/REMAP --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.6.0_epoch_900_576_360/epoch-0900.onnx --disp_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/disp --output_dir ./result/D10.6.0/kitti_576
 ```
 ### Parker
- - use tof as label
+ - use tof as label(输入左右目、尺寸、--disp_dir 三通道tof值、bf、onnx模型，，输出测试结果+errormap)
 ```angular2html
 python main.py --data_dir /data/Parker/REMAP/TEST/data_2023_08_23_pick --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.6.0_epoch_900_576_360/epoch-0900.onnx --disp_dir /data/Parker/test_result/NPU/depth_data/data_2023_08_23_pick/result_of_tof --bf 3424 --output_dir ./tt1
 ```
- - use depth as labels
+ - use depth as labels(输入左右目、尺寸、--disp_dir 图像深度 ？？？？、bf、onnx模型，，输出测试结果+errormap)
 ```angular2html
-python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_depth --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --center_crop 0.9 --without_tof --output_dir ttt1 
+python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_depth --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --without_tof --output_dir ttt1 
 ```
 
 ### Rubby
@@ -31,9 +30,13 @@ python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /d
 ```angular2html
 python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/rubby  --disp_dir /data/rubby --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --center_crop 0.9 --without_tof --output_dir ttt1 
 ```
-### image different
+## image different 输出报告的对比数据
 ```angular2html
-main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP --output_dir result/D10.2.13/parker_compare_psl_new --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --tof_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_tof --tof_selected /data/Parker/test_result/NPU/depth_data/pick_mask/result_image_tof --center_crop 0.9
+python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP --output_dir result/D10.2.13/parker_compare_psl_new --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --tof_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_tof --tof_selected /data/Parker/test_result/NPU/depth_data/pick_mask/result_image_tof --center_crop 0.9
+```
+### 对比立体匹配和模型输出
+```angular2html
+python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP --output_dir result/D10.2.13/parker_compare_psl_slam --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/ONNX_MODLE_SAVE/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --tof_dir /data/Parker/test_result/depth_slam/pick   --width 576 --height 360
 ```
 
 ## old version test example demo
