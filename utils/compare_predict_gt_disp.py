@@ -5,7 +5,7 @@ import numpy as np
 import os
 from file_utils import MkdirSimple
 import matplotlib.pyplot as plt
-from utils.compare_tof import get_boundary
+from utils.compare_tof import get_boundary, get_boundary_wh
 
 def val_cv2_tf_io(disp_file):
 
@@ -93,7 +93,8 @@ def getAbsdiff(depth_map, disparity_map, path, name):
     plt.savefig("myplot.png")
 
 
-def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None, center_crop=None, without_tof=False, scale=100.0):
+def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None, center_crop=None, without_tof=False
+                       , scale=100.0, width=None, height=None):
     gt = cv2.imread(disp_file, -1)
     gt = gt /256.0
     if bf is not None:
@@ -112,11 +113,18 @@ def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None, center_c
         if center_crop is not None:
             left, right, top, bottom = get_boundary(gt, center_crop)
             gt = gt[top: bottom, left: right]
+        elif width is not None and height is not None:
+            left, right, top, bottom = get_boundary_wh(gt, width=width, height=height)
+            gt = gt[top: bottom, left: right]
+
         bf = float(bf)
         mask = gt > 0
         gt[mask] = bf / gt[mask]
         print("gt max: ", np.max(gt), np.min(gt))
         print(gt.shape)
+    elif width is not None and height is not None:
+        left, right, top, bottom = get_boundary_wh(gt, width=width, height=height)
+        gt = gt[top: bottom, left: right]
 
     disparities = disp_output
 

@@ -14,7 +14,7 @@ from utils.file_utils import WriteDepth
 from utils.file_utils import get_files, get_last_name
 from utils.compare_tof import compare_depth_tof
 from utils.compare_predict_gt_disp import compare_depth_disp
-from utils.compare_tof import get_boundary
+from utils.compare_tof import get_boundary, get_boundary_wh
 def get_parameter():
     parser = argparse.ArgumentParser()
 
@@ -22,8 +22,8 @@ def get_parameter():
 
     parser.add_argument('--model_type', default="madnet", type=str, help='model type of onnx')
 
-    parser.add_argument('--img_height', default=400, type=int, help='Image height for inference')
-    parser.add_argument('--img_width', default=640, type=int, help='Image width for inference')
+    parser.add_argument('--height', default=None, type=int, help='Image height for inference')
+    parser.add_argument('--width', default=None, type=int, help='Image width for inference')
 
     parser.add_argument('--output_dir', default=None, type=str,
                         help='Directory to save inference results and test results')
@@ -80,6 +80,10 @@ def main():
                 left, right, top, bottom = get_boundary(left_image, args.center_crop)
                 left_image = left_image[top: bottom, left: right]
                 right_image = right_image[top: bottom, left: right]
+            elif args.width is not None and args.height is not None:
+                left, right, top, bottom = get_boundary_wh(left_image, width=int(args.width), height=int(args.height))
+                left_image = left_image[top: bottom, left: right]
+                right_image = right_image[top: bottom, left: right]
 
             left_copy = left_image.copy()
             if args.model_type == "madnet":
@@ -96,7 +100,7 @@ def main():
                 print("disp_file", disp_file)
                 compare_depth_disp(args.output_dir, op, disp, disp_file, bf=args.bf
                                    , center_crop=args.center_crop, without_tof=args.without_tof
-                                   ,scale=args.scale)
+                                   ,scale=args.scale, width=args.width, height=args.height)
             op = op.replace(".jpg", ".png")
 
             WriteDepth(disp, left_copy, args.output_dir, op, args.bf)

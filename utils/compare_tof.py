@@ -23,26 +23,50 @@ def get_boundary(image, center_crop):
     bottom = round(image.shape[0] - height_crop // 2)
 
     return left, right, top , bottom
-def compare_depth_tof(path, file_name, depth, tof, image=None, center_crop=None):
+
+def get_boundary_wh(image, width, height):
+    assert image.shape[0] >= int(height), "original image height: {} is small than {height}, can't crop".format(image.shape[0], height)
+    assert image.shape[1] >= int(width), "original image width: {} is small than {}, can't crop".format(image.shape[1], int(width))
+
+    height_crop = image.shape[0] - int(height)
+    width_crop = image.shape[1] - int(width)
+    left = round(width_crop // 2)
+    right = image.shape[1] - (width_crop - left)
+    assert right - left == width
+
+    top = round(height_crop // 2)
+    bottom = image.shape[0] - (height_crop - top)
+    assert bottom - top == height
+
+    return left, right, top, bottom
+
+def compare_depth_tof(path, file_name, depth, tof, image=None, center_crop=None, width=None, height=None):
 
     if image is None:
         pass
     else:
         image_with_tof_box = cv2.imread(image)
 
-    print("deal with depth image: ", depth)
+    print("deal with depth image: {}, tof: {}".format(depth, tof))
 
     image_depth = cv2.imread(depth)
     image_tof = cv2.imread(tof)
-    if center_crop is not None:
-        left, right, top, bottom = get_boundary(image_depth, center_crop)
+    print("1111", image_depth.shape, image_tof.shape, image_with_tof_box.shape)
 
-        image_depth = image_depth[top: bottom, left: right]
+    if center_crop is not None:
+        left, right, top, bottom = get_boundary(image_tof, center_crop)
+
+        image_tof = image_tof[top: bottom, left: right]
+        if image is not None:
+            image_with_tof_box = image_with_tof_box[top: bottom, left: right]
+    elif height is not None and width is not None:
+        left, right, top, bottom = get_boundary_wh(image_tof, width=width, height=height)
+
         image_tof = image_tof[top: bottom, left: right]
         if image is not None:
             image_with_tof_box = image_with_tof_box[top: bottom, left: right]
 
-
+    print(image_depth.shape, image_tof.shape, image_with_tof_box.shape)
     erroe_number = file_name.replace(".png", "_error_number.png")
     error_ratio = file_name.replace(".png", "_error_ratio.png")
     errpr_img = file_name.replace(".png", "_error.png")
@@ -59,7 +83,7 @@ def compare_depth_tof(path, file_name, depth, tof, image=None, center_crop=None)
     MkdirSimple(errpr_img_scale)
 
     # 深度估计图像获取非0的index
-    image_depth = image_depth[:, :, 0] #+ (image_depth[:, :, 1] > 0) * 255 + image_depth[:, :, 1] + (image_depth[:, :, 2] > 0) * 511 + image_depth[:, :, 2]
+    image_depth = image_depth[:, :, 0] + (image_depth[:, :, 1] > 0) * 255 + image_depth[:, :, 1] + (image_depth[:, :, 2] > 0) * 511 + image_depth[:, :, 2]
     image_depth_with_value = image_depth.copy()
     image_depth_with_value[image_depth_with_value > 0] = 1
 

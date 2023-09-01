@@ -6,27 +6,30 @@
 ### KITTI
  - no disp
 ```angular2html
-python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti/temp/ --img_height 375 --img_width 1424 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_ --output_dir ./result/D10.2.13/kitti_2000_no
+python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti/temp/ --height 375 --width 1242 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_ --output_dir ./result/D10.2.13/kitti_2000_no
 ```
  - with disp
 ```angular2html
-python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/REMAP --img_height 375 --img_width 1424 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.14_375_1242/epoch-1700.onnx --disp_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/disp --output_dir ./result/D10.2.14/kitti_1700
+python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/REMAP --height 375 --width 1242 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.6.0_epoch_900_1242_375/epoch-0900.onnx --disp_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/disp --output_dir ./result/D10.6.0/kitti_1242
+python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/REMAP --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.6.0_epoch_900_576_360/epoch-0900.onnx --disp_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/kitti_train/disp --output_dir ./result/D10.6.0/kitti_576
 ```
 ### Parker
+ - use tof as label
 ```angular2html
-python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_tof --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx  --bf 3424 --center_crop 0.9  --output_dir ttt1
+python main.py --data_dir /data/Parker/REMAP/TEST/data_2023_08_23_pick --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.6.0_epoch_900_576_360/epoch-0900.onnx --disp_dir /data/Parker/test_result/NPU/depth_data/data_2023_08_23_pick/result_of_tof --bf 3424 --output_dir ./tt1
 ```
  - use depth as labels
 ```angular2html
-python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_depth --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --center_crop 0.9 --without_tof --output_dir ttt1 
+python main.py --data_dir /data/Parker/REMAP/TEST/pick_mask_REMAP  --disp_dir /data/Parker/test_result/NPU/depth_data/pick_mask/result_depth --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --center_crop 0.9 --without_tof --output_dir ttt1 
 ```
+
 ### Rubby
 ```angular2html
- python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/rubby --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.14_576_360/epoch-1700.onnx   --bf 1420 --center_crop 0.9 --output_dir ./result/D10.2.14/rubby-1700
+ python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/rubby --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.14_576_360/epoch-1700.onnx   --bf 1420 --center_crop 0.9 --output_dir ./result/D10.2.14/rubby-1700
 ```
  - use depth as labels
 ```angular2html
-python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/rubby  --disp_dir /data/rubby --img_height 360 --img_width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --center_crop 0.9 --without_tof --output_dir ttt1 
+python main.py --data_dir /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/test_images/rubby  --disp_dir /data/rubby --height 360 --width 576 --onnx_file /home/indemind/Code/PycharmProjects/Depth_Estimation/Stereo/madnet/D10.2.13_576_360/epoch-2000.onnx --bf 3424 --center_crop 0.9 --without_tof --output_dir ttt1 
 ```
 ### image different
 ```angular2html
