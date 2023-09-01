@@ -98,6 +98,7 @@ def WriteDepth(depth, limg, path, name, bf=None):
     if bf is not None:
         bf = float(bf)
     output_concat_color = os.path.join(path, "concat_color", name)
+    output_resize = os.path.join(path, "resize", name)
     output_concat_gray = os.path.join(path, "concat_gray", name)
     output_gray = os.path.join(path, "gray", name)
     output_gray_scale = os.path.join(path, "gray_scale", name)
@@ -115,6 +116,7 @@ def WriteDepth(depth, limg, path, name, bf=None):
     MkdirSimple(output_color)
     MkdirSimple(output_concat)
     MkdirSimple(output_gray_scale)
+    MkdirSimple(output_resize)
 
     predict_np = depth.squeeze()
     print(predict_np.max(), " ", predict_np.min())
@@ -153,6 +155,7 @@ def WriteDepth(depth, limg, path, name, bf=None):
 
     cv2.imwrite(output_concat_depth, concat_img_depth)
     cv2.imwrite(output_concat, concat)
+    cv2.imwrite(output_resize, limg)
 
 def get_last_name(file_name):
     if file_name is not None:
