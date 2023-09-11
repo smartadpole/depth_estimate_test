@@ -15,6 +15,7 @@ from utils.file_utils import get_files, get_last_name
 from utils.compare_tof import compare_depth_tof
 from utils.compare_predict_gt_disp import compare_depth_disp
 from utils.compare_tof import get_boundary, get_boundary_wh
+
 def get_parameter():
     parser = argparse.ArgumentParser()
 
@@ -94,8 +95,11 @@ def main():
                 right_image = preprocess_hit(right_image)
 
             output = model.forward2((left_image, right_image))
-
-            disp = output[0]
+            if args.model_type == "madnet":
+                disp = output[0]
+            elif args.model_type == "hitnet":
+                disp = output[0][:, 0:1]
+                disp = np.clip(disp / 192 * 255, 0, 255)
             if disp_file is not None:
                 print("disp_file", disp_file)
                 compare_depth_disp(args.output_dir, op, disp, disp_file, bf=args.bf

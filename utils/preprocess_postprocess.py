@@ -17,8 +17,8 @@ def np2float(x, t=True, bgr=False):
 
 def preprocess_hit(image):
     image = np2float(image)
-    # image = image * 2 - 1
-    image = image[None, ...]
+    image = np.expand_dims(image, axis=0).astype(np.float32)
+    image = image * 2 - 1
     return image
 
 def preprocess_madnet(image):
