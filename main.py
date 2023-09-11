@@ -71,9 +71,9 @@ def main():
 
         for left_file, right_file, disp_file in zip(left_files, right_files, disp_true):
             if left_file[root_len:][0] == '/':
-                op = os.path.join(args.output_dir, left_file[root_len + 1:])
+                op = left_file[root_len + 1:]
             else:
-                op = os.path.join(args.output_dir, left_file[root_len:])
+                op = left_file[root_len:]
             left_image = cv2.imread(left_file)
             right_image = cv2.imread(right_file)
             if args.center_crop is not None:

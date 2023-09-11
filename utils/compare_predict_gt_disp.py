@@ -75,8 +75,11 @@ def getAbsdiff(depth_map, disparity_map, path, name):
     axes[3].set_title('Difference Map')
     # axes[2].colorbar()
     axes[3].axis('off')
+    diff_map1 = diff_map.copy()
     diff_map = cv2.applyColorMap(np.asarray(diff_map).astype("uint8"), cv2.COLORMAP_JET)
     cv2.imwrite(os.path.join(output_depth, "diff_map.png"), diff_map)
+    diff_map1 =  cv2.applyColorMap(np.asarray(diff_map1).astype("uint8") * 5, cv2.COLORMAP_JET)
+    cv2.imwrite(os.path.join(output_depth, "diff_map_scale_5.png"), diff_map1)
 
     concat = np.vstack([cv2.cvtColor(depth_map_norm, cv2.COLOR_GRAY2BGR), cv2.cvtColor(depth_map_norm_mask, cv2.COLOR_GRAY2BGR)
                            ,cv2.cvtColor(disparity_map_norm, cv2.COLOR_GRAY2BGR), diff_map])
