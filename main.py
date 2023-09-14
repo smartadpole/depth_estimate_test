@@ -70,7 +70,12 @@ def main():
 
         root_len = len(args.data_dir)
 
-        for left_file, right_file, disp_file in zip(left_files, right_files, disp_true):
+        for left_file, right_file, disp_file in zip(sorted(left_files), sorted(right_files), sorted(disp_true)):
+            assert get_last_name(left_file) == get_last_name(right_file) \
+                , "left_file and right_file not same"
+            assert get_last_name(left_file) == get_last_name(disp_file) \
+                , "left_file and disp_file not same"
+
             if left_file[root_len:][0] == '/':
                 op = left_file[root_len + 1:]
             else:
@@ -115,7 +120,7 @@ def main():
         tof_lists = get_files(args.tof_dir)
         if args.tof_selected is not None:
             tof_selected_lists = get_files(args.tof_selected)
-            for tof_file, tof_selected_file in zip(tof_lists, tof_selected_lists):
+            for tof_file, tof_selected_file in zip(sorted(tof_lists), sorted(tof_selected_lists)):
                 assert get_last_name(tof_file) == get_last_name(tof_selected_file) \
                     , "tof file and tof select is not same"
         else:
@@ -130,7 +135,7 @@ def main():
 
     if args.tof_dir is not None and len(tof_lists) > 0:
         root_len = len(args.output_dir)
-        for tof_file, tof_selected_file, depth_file in zip(tof_lists, tof_selected_lists, depth_files):
+        for tof_file, tof_selected_file, depth_file in zip(sorted(tof_lists), sorted(tof_selected_lists), sorted(depth_files)):
             assert get_last_name(tof_file) == get_last_name(depth_file), "tof file: {} and depth file: {} is not same!".format(tof_file, depth_file)
 
             if depth_file[root_len:][0] == '/':
