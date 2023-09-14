@@ -99,7 +99,7 @@ def main():
                 disp = output[0]
             elif args.model_type == "hitnet":
                 disp = output[0][:, 0:1]
-                disp = np.clip(disp / 192 * 255, 0, 255)
+                # disp = np.clip(disp / 192 * 255, 0, 255)
             if disp_file is not None:
                 print("disp_file", disp_file)
                 compare_depth_disp(args.output_dir, op, disp, disp_file, bf=args.bf
