@@ -50,6 +50,9 @@ def getAbsdiff(depth_map, disparity_map, path, name):
     # diff_map = cv2.absdiff(depth_map_norm_mask.astype("float32"), disparity_map_norm.astype("float32"))
     diff_map = np.abs(depth_map_norm_mask.astype("float32") - disparity_map_norm.astype("float32"))
     # diff_map = cv2.bitwise_and(diff_map, mask)
+    diff_map_original = diff_map.copy()
+    diff_map_original[diff_map_original > 255] = 255
+    cv2.imwrite(os.path.join(output_depth, "diff_uint8.png"), diff_map.astype(np.uint8))
 
     # 计算深度图和视差图的差异
     fig, axes = plt.subplots(4, 1, figsize=(6, 12))
@@ -95,6 +98,21 @@ def getAbsdiff(depth_map, disparity_map, path, name):
     plt.show()
     plt.savefig("myplot.png")
 
+def get_abs_diff_uint8(depth_map, disparity_map, path, name):
+    name = os.path.splitext(name)[0]
+    output_depth = os.path.join(path, "diff", name + ".png")
+    MkdirSimple(output_depth)
+    depth_map = np.squeeze(depth_map)
+    disparity_map =np.squeeze(disparity_map)# * 256.0
+    mask = disparity_map > 0
+    depth_map_norm_mask = depth_map * mask
+    disparity_map_norm = disparity_map * mask
+
+    # 计算深度图和视差图的差异
+    diff_map = np.abs(depth_map_norm_mask.astype("float32") - disparity_map_norm.astype("float32"))
+
+    diff_map[diff_map > 255] = 255
+    cv2.imwrite(os.path.join(output_depth), diff_map.astype(np.uint8))
 
 def compare_depth_disp(output_dir, op, disp_output, disp_file, bf=None, center_crop=None, without_tof=False
                        , scale=100.0, width=None, height=None):
