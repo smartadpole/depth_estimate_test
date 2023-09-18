@@ -2,6 +2,19 @@
 ## Environment
 1. pip install -r requirements.txt
 2. confirm file ```/usr/share/fonts/Fonts/simsun.ttf``` is exists.
+## filter error map 
+### generate error map
+```shell
+python disp_tof_2_erroeMap.py --height 360 --width 576 --output_dir /work/data/Parker/DEPTH/CREStereo_100_tof/TRAIN/data_2023_08_23/scale_tof_crop_disp --disp_dir /work/data/Parker/DEPTH/CREStereo_100_tof/TRAIN/data_2023_08_23/scale_tof_crop_disp --tof_dir /work/data/Parker/TOF/TRAIN/data_2023_08_23
+```
+### generate error map with error ratio
+```shell
+python errorMap_ratio.py --output_dir ./resilt_0823 --error_map_dir /work/data/Parker/DEPTH/CREStereo_100_tof/TRAIN/data_2023_08_23/scale_tof_crop_disp/diff
+```
+### generate error map list with error ratio(wrote in demo error points' value > 10 with above 25% will be remove)
+```shell
+python errorMap_ratio.py --save_dir ./result_desk_half_list --error_map_dir /work/data/Parker/DEPTH/TRAIN/img_tree_crop_scale/diff
+```
 ## new test example
 ### KITTI
  - no disp(输入左右目、尺寸、onnx模型，输出测试结果)
