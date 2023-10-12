@@ -43,8 +43,7 @@ def get_parameter():
     parser.add_argument('--bf', type=str, default=None, help='bf for test to generate depth, only parker'
                                                              ' need this parameter now')
 
-    parser.add_argument('--center_crop', type=str, default=None, help='bf for test to generate depth, only parker'
-                                                             ' need this parameter now')
+    parser.add_argument('--center_crop', type=str, default=None, help='center_crop for image. this is replaced by height and width')
 
     parser.add_argument('--without_tof', action="store_true", default=False, help="indemind data label is not tof")
 
@@ -69,12 +68,15 @@ def main():
         depth_from_onnx = True
 
         root_len = len(args.data_dir)
+        if disp_true[0] is None:
+            disp_true = [0] * len(left_files)
 
         for left_file, right_file, disp_file in zip(sorted(left_files), sorted(right_files), sorted(disp_true)):
             assert get_last_name(left_file) == get_last_name(right_file) \
                 , "left_file and right_file not same"
-            assert get_last_name(left_file) == get_last_name(disp_file) \
-                , "left_file and disp_file not same"
+            if disp_file != 0:
+                assert get_last_name(left_file) == get_last_name(disp_file) \
+                    , "left_file and disp_file not same"
 
             if left_file[root_len:][0] == '/':
                 op = left_file[root_len + 1:]
@@ -105,7 +107,7 @@ def main():
             elif args.model_type == "hitnet":
                 disp = output[0][:, 0:1]
                 # disp = np.clip(disp / 192 * 255, 0, 255)
-            if disp_file is not None:
+            if disp_file is not None and disp_file != 0:
                 print("disp_file", disp_file)
                 compare_depth_disp(args.output_dir, op, disp, disp_file, bf=args.bf
                                    , center_crop=args.center_crop, without_tof=args.without_tof
