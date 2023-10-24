@@ -2,7 +2,7 @@ import argparse
 import sys, os
 import cv2
 import numpy as np
-
+from time import time
 CURRENT_DIR = os.path.dirname(__file__)
 sys.path.append(os.path.join(CURRENT_DIR, '../'))
 
@@ -12,9 +12,6 @@ from utils.file_utils import get_left_right_files
 from utils.preprocess_postprocess import preprocess_hit, preprocess_madnet
 from utils.file_utils import WriteDepth
 from utils.file_utils import get_files, get_last_name
-from utils.compare_tof import compare_depth_tof
-from utils.compare_predict_gt_disp import compare_depth_disp
-from utils.compare_tof import get_boundary, get_boundary_wh
 
 def get_parameter():
     parser = argparse.ArgumentParser()
@@ -84,14 +81,10 @@ def main():
                 op = left_file[root_len:]
             left_image = cv2.imread(left_file)
             right_image = cv2.imread(right_file)
-            if args.center_crop is not None:
-                left, right, top, bottom = get_boundary(left_image, args.center_crop)
-                left_image = left_image[top: bottom, left: right]
-                right_image = right_image[top: bottom, left: right]
-            elif args.width is not None and args.height is not None:
-                left, right, top, bottom = get_boundary_wh(left_image, width=int(args.width), height=int(args.height))
-                left_image = left_image[top: bottom, left: right]
-                right_image = right_image[top: bottom, left: right]
+
+            if left_image.shape[0] != args.height:
+                left_image = left_image[:args.height, :args.width]
+                right_image = right_image[:args.height, :args.width]
 
             left_copy = left_image.copy()
             if args.model_type == "madnet":

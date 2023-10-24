@@ -14,6 +14,7 @@ sys.path.append(os.path.join(CURRENT_DIR, '../../'))
 
 import argparse
 import numpy as np
+from time import  time
 
 # -*-coding: utf-8 -*-
 
@@ -57,17 +58,24 @@ class ONNXModel():
         return input_feed
 
     def forward(self, image:np.ndarray):
+        start = time()
         input_feed = self.get_input_feed(self.input_name, image)
         for index in input_feed:
-            print("key: ", index," : ", input_feed[index].shape)
+            # print("key: ", index," : ", input_feed[index].shape)
+            run_time = time() - start
+            print("time: {}".format(run_time))
         scores = self.onnx_session.run(self.output_name, input_feed=input_feed)
         return scores
 
     def forward2(self, images):
         input_feed = self.get_input_feed2(self.input_name, images)
         for index in input_feed:
-            print("key: ", index," : ", input_feed[index].shape)
+            # print("key: ", index," : ", input_feed[index].shape)
+            pass
+        start = time()
         scores = self.onnx_session.run(self.output_name, input_feed=input_feed)
+        run_time = time() - start
+        print("time: {} ms".format(run_time * 1000))
         return scores
 
 

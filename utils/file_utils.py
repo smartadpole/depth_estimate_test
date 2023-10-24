@@ -107,18 +107,22 @@ def WriteDepth(depth, limg, path, name, bf=None):
     output_color = os.path.join(path, "color", name)
     output_concat_depth = os.path.join(path, "concat_depth", name)
     output_concat = os.path.join(path, "concat", name)
-    MkdirSimple(output_concat_color)
-    MkdirSimple(output_concat_disp)
-    MkdirSimple(output_concat_depth)
-    MkdirSimple(output_disp)
-    MkdirSimple(output_depth)
-    MkdirSimple(output_depth_psl)
-    MkdirSimple(output_color)
-    MkdirSimple(output_concat)
+    # MkdirSimple(output_concat_color)
+    # MkdirSimple(output_concat_disp)
+    # MkdirSimple(output_concat_depth)
+    # MkdirSimple(output_disp)
+    # MkdirSimple(output_depth)
+    # MkdirSimple(output_depth_psl)
+    # MkdirSimple(output_color)
+    # MkdirSimple(output_concat)
+    # MkdirSimple(output_resize)
     MkdirSimple(output_disp_scale)
-    MkdirSimple(output_resize)
 
     predict_np = depth.squeeze()
+    predict_np_gray_scale = predict_np * 256
+    cv2.imwrite(output_disp_scale, predict_np_gray_scale.astype(np.uint16))
+    return
+
     print(predict_np.max(), " ", predict_np.min())
     predict_scale = (predict_np - np.min(predict_np))* 255 / (np.max(predict_np) - np.min(predict_np))
 
@@ -147,8 +151,6 @@ def WriteDepth(depth, limg, path, name, bf=None):
     cv2.imwrite(output_concat_disp, concat_img_gray)
     cv2.imwrite(output_color, color_img)
 
-    predict_np_gray_scale = predict_np * 256
-    cv2.imwrite(output_disp_scale, predict_np_gray_scale.astype(np.uint16))
     cv2.imwrite(output_disp, np.squeeze(predict_np))
     print(predict_np.shape, np.squeeze(predict_np).shape)
     cv2.imwrite(output_depth, depth_img_rgb)
